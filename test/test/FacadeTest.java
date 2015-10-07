@@ -7,6 +7,7 @@ package test;
 
 import entities.InfoGeneral;
 import entities.Person;
+import exception.PersonNotFoundException;
 import facade.Facade;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +51,7 @@ public class FacadeTest {
     
     //Test in correct order, where order matters
     @Test 
-    public void testAll() {
+    public void testAll() throws PersonNotFoundException {
         testGetPersons();
         //testGetPerson();
         testAddPerson();
@@ -67,13 +68,13 @@ public class FacadeTest {
     }
     
     @Test
-    public void testGetPerson() {
+    public void testGetPerson() throws PersonNotFoundException {
         Person p = new Person(2, "Alice", "Smith");
         assertEquals(p, facade.getPerson(2));
     }
     
     //@Test 
-    public void testAddPerson() {
+    public void testAddPerson() throws PersonNotFoundException{
         Person p = new Person("Lars", "Larsen");
         facade.addPerson(p);
         assertEquals(p, facade.getPerson(4));
@@ -90,7 +91,7 @@ public class FacadeTest {
     }
     
     @Test
-    public void testEditPerson() {
+    public void testEditPerson() throws PersonNotFoundException {
         Person p = new Person(1);
         InfoGeneral ig = new InfoGeneral();
         ig.setEmail("hangoo@my.ll");

@@ -11,7 +11,7 @@ import entities.Company;
 import entities.Hobby;
 import entities.InfoGeneral;
 import entities.Person;
-import exceptions.PersonNotFoundException;
+import exception.PersonNotFoundException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -51,10 +51,15 @@ public class Facade implements FacadeInterface {
     }
 
     @Override
-    public Person getPerson(int id) {
+    public Person getPerson(int id) throws PersonNotFoundException {
         EntityManager em = getEntityManager();
         try {
-            return (Person)em.createNamedQuery("Person.findByInfoId").setParameter("infoId", id).getSingleResult();
+            Person p = em.find(Person.class, id);
+            if (p == null) {
+                throw new PersonNotFoundException();
+            }
+            return p;
+            //return (Person)em.createNamedQuery("Person.findByInfoId").setParameter("infoId", id).getSingleResult();
         } 
         finally {
             em.close();
@@ -62,7 +67,7 @@ public class Facade implements FacadeInterface {
     }
 
     @Override
-    public void addPerson(Person p) {
+    public Person addPerson(Person p) {
         EntityManager em = getEntityManager();
         InfoGeneral ig = new InfoGeneral();
         Collection<Hobby> hs = p.getHobbyCollection();
@@ -77,6 +82,7 @@ public class Facade implements FacadeInterface {
                 em.persist(ite.next());
             }
             em.getTransaction().commit();
+            return p;
         }
         finally {
             em.close();
@@ -84,7 +90,7 @@ public class Facade implements FacadeInterface {
     }
     
     @Override
-    public void addCompany(Company c) {
+    public Company addCompany(Company c) {
         EntityManager em = getEntityManager();
         InfoGeneral ig = new InfoGeneral();
         try {
@@ -94,6 +100,7 @@ public class Facade implements FacadeInterface {
             c.setInfoId(ig.getInfoId());
             em.persist(c);
             em.getTransaction().commit();
+            return c;
         }
         finally {
             em.close();
@@ -118,13 +125,13 @@ public class Facade implements FacadeInterface {
             em.close();
         }
     }
-    public Person editPerson(Person p) {
+    public Person editPerson(Person p) throws PersonNotFoundException{
         EntityManager em = getEntityManager();
         try {
             Person ep = em.find(Person.class, p.getInfoId());
             Query q = em.createNamedQuery("Person.findByInfoId").setParameter("infoId", p.getInfoId());
             if (ep == null) {
-                //throw new Exception();
+                throw new PersonNotFoundException();
             }
             if (p.getFirstName() != null) ep.setFirstName(p.getFirstName());
             if (p.getLastName() != null) ep.setLastName(p.getLastName());
@@ -244,8 +251,12 @@ public class Facade implements FacadeInterface {
     private Address addAddress(Address a) {
         EntityManager em = getEntityManager();
         Query q = null;
-        if (a.getStreet() != null && a.getStreetNumber() != null) {
-            q = em.createQuery("SELECT a FROM Address WHERE street='"+a.getStreet()+"' AND streetnumber='"+a.getStreetNumber()+"'");
+        if (a.getStreet() != null && a.getStreetNumber() != null && a.getZipCode() != null) {
+            String qstring = "SELECT a FROM Address a WHERE "
+                    + "a.street='"+a.getStreet()+"' AND "
+                    + "a.streetNumber='"+a.getStreetNumber()+"' AND"
+                    + "a.zipCode='"+a.getZipCode().getZipCode()+"'";
+            q = em.createQuery(qstring);
         }
         if ((q != null && q.getResultList().isEmpty()) || q == null) {
             City c = new City();
@@ -269,12 +280,14 @@ public class Facade implements FacadeInterface {
     
     private City addCity(City c) {
         EntityManager em = getEntityManager();
+        if (c.getZipCode() == null) {
+            return null;
+        }
         Query q = em.createNamedQuery("City.findByZipCode").setParameter("zipCode", c.getZipCode());
         if (q.getResultList().isEmpty()) {
             try {
                 em.getTransaction().begin();
                 em.persist(c);
-                em.flush();
                 em.getTransaction().commit();
                 return c;
             }

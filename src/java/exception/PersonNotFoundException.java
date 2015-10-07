@@ -1,17 +1,19 @@
-
-package exceptions;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package exception;
 
 /**
  *
- * @author plaul1
+ * @author ichti
  */
 public class PersonNotFoundException extends Exception {
-
-  public PersonNotFoundException(String string) {
-    super(string);
-  }
-  public PersonNotFoundException() {
-    super("Person with requested id not found");
-  }
-  
+    public PersonNotFoundException(String msg) {
+        super(msg);
+    }
+    public PersonNotFoundException() {
+        super("Person not found.");
+    }
 }

@@ -7,6 +7,7 @@ package exception;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import javax.servlet.ServletContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -19,20 +20,21 @@ import javax.ws.rs.ext.Provider;
  * @author ichti
  */
 @Provider
-public class PersonNotFoundExceptionMapper implements 
-        ExceptionMapper<PersonNotFoundException> {
+public class GeneralExceptionMapper 
+    implements ExceptionMapper<Throwable> {
     static Gson gson = new GsonBuilder().setPrettyPrinting().create();
     
     @Context
     ServletContext context;
     
     @Override
-    public Response toResponse(PersonNotFoundException exception) {
-        boolean debug = context.getInitParameter("debug").toLowerCase().equals("true");
+    public Response toResponse(Throwable exception) {
         //boolean debug = true;
+        boolean debug = context.getInitParameter("debug").toLowerCase().equals("true");
         ErrorMessage err = new ErrorMessage(exception, debug);
-        err.setMessage("Person not found");
-        return Response.status(404)
+        err.setMessage("Internal error occured. Sorry for the inconvenience");
+        
+        return Response.status(500)
                        .entity(gson.toJson(err))
                        .type(MediaType.APPLICATION_JSON).build();
     }

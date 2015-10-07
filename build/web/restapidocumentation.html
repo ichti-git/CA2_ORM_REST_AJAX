@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <script src="jquery-1.11.3.min.js"></script>
+        <script src='restapidocumentation.js'></script>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        The following fields is available in the api (case sensitive):<br>
+        Person:<br>
+        firstname - First name of a person<br> 
+        lastname - Last name of a person<br>
+        hoobies [name, description] - an array of a persons hobbies, given by a name and description<br>
+        email - The persons email<br>
+        phones [phone, description] - an array of persons phonenumbers, given by a phone (the number) and description<br>
+        street - The street the person live on<br>
+        streetnumber - The street number<br>
+        zipcode - Zip code of the city the person live in<br>
+        city - Name of the city the person live in<br>
+        <br>
+        Company:<br>
+        not available yet
+        <br>
+        <br>
+        
+        
+        GET:<br>
+        <b>api/person/complete</b><br>
+        Returns all persons with all information they have, as json. Information
+        not existing for a person will be omitted.<br>
+        <div class='toggleexample'>Click to show example<br><div class='jsonexample'>
+[{
+    "firstname": "John",
+    "lastname": "Smith",
+    "email": "j@smith.org",
+    "phones": [
+      {
+        "phone": "+4567883249",
+        "description": "Home phone"
+      },
+      {
+        "phone": "+4586224591",
+        "description": "Mobile"
+      }
+    ],
+    "street": "Hansensvej",
+    "streetnumber": "44",
+    "zipcode": "3600",
+    "city": "Frederikssund"
+  },
+  {
+    "firstname": "Alice",
+    "lastname": "Smith",
+    "street": "Hansensvej",
+    "streetnumber": "44",
+    "zipcode": "3600",
+    "city": "Frederikssund"
+  },
+  {
+    "firstname": "Bob",
+    "lastname": "Gordard",
+    "email": "bob@last.em",
+    "street": "TinyRoad",
+    "streetnumber": "2",
+    "zipcode": "4000",
+    "city": "Roskilde"
+    }]</div></div>
+        
+        <br>
+        <br>
+        GET:<br>
+        <b>api/person/complete/{id}</b><br>
+        Returns all information of the person with id {id} as json. Information
+        not existing for a person will be omitted.<br>
+        If the person with {id} does not exist, a "404 Person not found" will be returned.<br>
+        <div class='toggleexample'>Click to show example<br><div class='jsonexample'>
+            {
+  "firstname": "Bob",
+  "lastname": "Gordard",
+  "email": "bob@last.em",
+  "street": "TinyRoad",
+  "streetnumber": "2",
+  "zipcode": "4000",
+  "city": "Roskilde"
+}       </div></div>
+        <br><br>
+        GET:<br>
+        <b>api/person/custom/{infolist}</b><br>
+        Returns the information given by the {infolist} of all persons as json. 
+        The {infolist} is a comma seperated (no spaces) list of fields (as shown at the top of the page).
+        Information not existing for a person will be omitted.<br>
+        <div class='toggleexample'>Click to show example<br><div class='jsonexample'>
+                given 'api/person/custom/firstname,lastname,street,city' 
+                the following will be returned: <br>
+[
+  {
+    "firstname": "John",
+    "lastname": "Smith",
+    "street": "Hansensvej",
+    "city": "Frederikssund"
+  },
+  {
+    "firstname": "Alice",
+    "lastname": "Smith",
+    "street": "Hansensvej",
+    "city": "Frederikssund"
+  },
+  {
+    "firstname": "Bob",
+    "lastname": "Gordard",
+    "street": "TinyRoad",
+    "city": "Roskilde"
+  }
+]</div></div>
+        <br><br>
+        
+        GET:<br>
+        <b>api/person/custom/{id}/{infolist}</b><br>
+        Returns the information given by the {infolist} of the person with {id} as json. 
+        The {infolist} is a comma seperated (no spaces) list of fields (as shown at the top of the page).
+        Information not existing for a person will be omitted.<br>
+        If the person with {id} does not exist, a "404 Person not found" will be returned.<br>
+        <div class='toggleexample'>Click to show example<br><div class='jsonexample'>
+                given 'api/person/custom/2/lastname,street,city,phones' the 
+                following will be returned:<br>
+{
+  "lastname": "Smith",
+  "street": "Hansensvej",
+  "city": "Frederikssund"
+  }<br>
+            </div></div>
+        <br><br>
+        
+        PUT:<br>
+        <b>api/person/</b><br>
+        Creates a a new person, with the information given in a json string. The format is the same 
+        as returned by the GET api. Wrong/unknown fields will be ignored. <br>
+        If succesful, a json string with the created person will be returned.<br>
+        If the json is malformed, a "500 Malformed json given" will be returned.<br>
+        <div class='toggleexample'>Click to show example<br><div class='jsonexample'>
+                example of a correct json request:<br>
+{ "firstname": "Karl",
+  "lastname": "Madsen",
+  "street": "Hansensvej",
+  "streetnumber": "44",
+  "hobbies": 
+    [ {"name": "Fishing", "description": "Fishing is fun"}]}<br>
+            </div></div>
+        <br><br>
+        POST:<br>
+        <b>api/person/custom/{id}/{infolist}</b><br>
+        Returns the information given by the {infolist} of the person with {id} as json. 
+        The {infolist} is a comma seperated (no spaces) list of fields (as shown at the top of the page).
+        Information not existing for a person will be omitted.<br>
+        If the person with {id} does not exist, a 404 Person not found will be returned.<br>
+        <div class='toggleexample'>Click to show example<br><div class='jsonexample'>
+                given 'api/person/custom/2/lastname,street,city,phones' the 
+                following will be returned:<br>
+{
+  "lastname": "Smith",
+  "street": "Hansensvej",
+  "city": "Frederikssund"
+  }<br>
+            </div></div>
+        <br><br>
+        DELETE:<br>
+        <b>api/person/custom/{id}/{infolist}</b><br>
+        Returns the information given by the {infolist} of the person with {id} as json. 
+        The {infolist} is a comma seperated (no spaces) list of fields (as shown at the top of the page).
+        Information not existing for a person will be omitted.<br>
+        If the person with {id} does not exist, a 404 Person not found will be returned.<br>
+        <div class='toggleexample'>Click to show example<br><div class='jsonexample'>
+                given 'api/person/custom/2/lastname,street,city,phones' the 
+                following will be returned:<br>
+{
+  "lastname": "Smith",
+  "street": "Hansensvej",
+  "city": "Frederikssund"
+  }<br>
+            </div></div>
+        <br><br>
+        
+    </body>
+</html>

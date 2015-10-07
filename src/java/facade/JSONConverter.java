@@ -72,8 +72,10 @@ public class JSONConverter {
             }
             if (infoitem.equals("street")) json.addProperty("street", p.getInfoGeneral().getAddressId().getStreet());
             if (infoitem.equals("streetnumber")) json.addProperty("streetnumber", p.getInfoGeneral().getAddressId().getStreetNumber());
-            if (infoitem.equals("zipcode")) json.addProperty("zipcode", p.getInfoGeneral().getAddressId().getZipCode().getZipCode());
-            if (infoitem.equals("city")) json.addProperty("city", p.getInfoGeneral().getAddressId().getZipCode().getCity());
+            if (infoitem.equals("zipcode") && p.getInfoGeneral().getAddressId().getZipCode() != null) 
+                json.addProperty("zipcode", p.getInfoGeneral().getAddressId().getZipCode().getZipCode());
+            if (infoitem.equals("city") && p.getInfoGeneral().getAddressId().getZipCode() != null) 
+                json.addProperty("city", p.getInfoGeneral().getAddressId().getZipCode().getCity());
         }
         return gson.toJson(json);  
     }

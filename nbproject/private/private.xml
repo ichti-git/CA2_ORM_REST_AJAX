@@ -6,18 +6,23 @@
             <file>file:/home/ichti/NetBeansProjects/CA2/src/java/rest/CompanyRest.java</file>
             <file>file:/home/ichti/NetBeansProjects/CA2/src/java/entities/Address.java</file>
             <file>file:/home/ichti/NetBeansProjects/CA2/src/java/rest/ApplicationConfig.java</file>
+            <file>file:/home/ichti/NetBeansProjects/CA2/src/java/exception/JsonSyntaxExceptionMapper.java</file>
+            <file>file:/home/ichti/NetBeansProjects/CA2/web/WEB-INF/web.xml</file>
             <file>file:/home/ichti/NetBeansProjects/CA2/src/java/rest/PersonRest.java</file>
-            <file>file:/home/ichti/NetBeansProjects/CA2/src/java/exception/AllExceptionMapper.java</file>
+            <file>file:/home/ichti/NetBeansProjects/CA2/web/restapidocumentation.js</file>
+            <file>file:/home/ichti/NetBeansProjects/CA2/web/restapidocumentation.html</file>
             <file>file:/home/ichti/NetBeansProjects/CA2/src/java/exception/ErrorMessage.java</file>
             <file>file:/home/ichti/NetBeansProjects/CA2/src/java/entities/City.java</file>
             <file>file:/home/ichti/NetBeansProjects/CA2/src/java/entities/InfoGeneral.java</file>
             <file>file:/home/ichti/NetBeansProjects/CA2/src/java/facade/JSONConverter.java</file>
             <file>file:/home/ichti/NetBeansProjects/CA2/src/java/entities/Person.java</file>
+            <file>file:/home/ichti/NetBeansProjects/CA2/src/java/exception/GeneralExceptionMapper.java</file>
             <file>file:/home/ichti/NetBeansProjects/CA2/src/java/exception/PersonNotFoundExceptionMapper.java</file>
             <file>file:/home/ichti/NetBeansProjects/CA2/src/java/entities/Phone.java</file>
             <file>file:/home/ichti/NetBeansProjects/CA2/src/java/exception/PersonNotFoundException.java</file>
             <file>file:/home/ichti/NetBeansProjects/CA2/src/java/facade/FacadeInterface.java</file>
             <file>file:/home/ichti/NetBeansProjects/CA2/src/java/scripts/populateZip_TEST.sql</file>
+            <file>file:/home/ichti/NetBeansProjects/CA2/test/test/FacadeTest.java</file>
             <file>file:/home/ichti/NetBeansProjects/CA2/src/java/facade/Facade.java</file>
         </group>
     </open-files>

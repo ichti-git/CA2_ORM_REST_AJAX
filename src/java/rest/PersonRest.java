@@ -6,6 +6,7 @@
 package rest;
 
 import entities.Person;
+import exception.PersonNotFoundException;
 import facade.Facade;
 import facade.JSONConverter;
 import javax.persistence.Persistence;
@@ -53,7 +54,7 @@ public class PersonRest {
     @GET
     @Produces("application/json")
     @Path("complete/{id}")
-    public String getPersonComplete(@PathParam("id") int id) {
+    public String getPersonComplete(@PathParam("id") int id) throws PersonNotFoundException {
         return JSONConverter.getJSONfromPerson(facade.getPerson(id), completeinfo);
     }
     
@@ -61,11 +62,16 @@ public class PersonRest {
     @GET
     @Produces("application/json")
     @Path("custom/{id}/{info}")
-    public String getPersonCustom(@PathParam("id") int id, @PathParam("info") String info) {
+    public String getPersonCustom(@PathParam("id") int id, @PathParam("info") String info) throws PersonNotFoundException {
         return JSONConverter.getJSONfromPerson(facade.getPerson(id), info);
     }
     
-    
+    @GET
+    @Produces("application/json")
+    @Path("/custom/{info}")
+    public String getPersonsCustom(@PathParam("info") String info) {
+        return JSONConverter.getJSONfromPersons(facade.getPersons(), info);
+    }
 
     /**
      * PUT method for updating or creating an instance of RESTAPI
@@ -77,7 +83,7 @@ public class PersonRest {
     @Produces("application/json")
     public String createPerson(String content) {
         Person p = JSONConverter.getPersonfromJSON(content);
-        facade.addPerson(p);
+        p = facade.addPerson(p);
         return JSONConverter.getJSONfromPerson(p, completeinfo);
     }
     
@@ -85,7 +91,7 @@ public class PersonRest {
     @Consumes("application/json")
     @Produces("application/json")
     @Path("{id}")
-    public String editPerson(@PathParam("id") int id, String content) {
+    public String editPerson(@PathParam("id") int id, String content) throws PersonNotFoundException {
         Person p = JSONConverter.getPersonfromJSON(content);
         p.setInfoId(id);
         p = facade.editPerson(p);
