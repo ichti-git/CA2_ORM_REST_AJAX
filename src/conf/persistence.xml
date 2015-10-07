@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="CA2PU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>entity.Phone</class>
+    <class>entity.Person</class>
+    <class>entity.InfoGeneral</class>
+    <class>entity.Address</class>
+    <class>entity.Hobby</class>
+    <class>entity.City</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/CA2Db?zeroDateTimeBehavior=convertToNull"/>
+      <property name="javax.persistence.jdbc.password" value=""/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.user" value="root"/>
+      <property name="javax.persistence.schema-generation.database.action" value="create"/>
+      <property name="eclipselink.canonicalmodel.subpackage" value="development"/>
+    </properties>
+  </persistence-unit>
+  
+  
+  <persistence-unit name="CA2PU_TEST" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>entity.Phone</class>
+    <class>entity.Person</class>
+    <class>entity.InfoGeneral</class>
+    <class>entity.Address</class>
+    <class>entity.Hobby</class>
+    <class>entity.City</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/CA2Db_TEST?zeroDateTimeBehavior=convertToNull"/>
+      <property name="javax.persistence.jdbc.password" value=""/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.user" value="root"/>
+      <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
+      <property name="javax.persistence.sql-load-script-source" value="scripts/populateZip_TEST.sql"/>
+      <!--<property name="javax.persistence.sql-load-script-source" value="scripts/data.sql"/>-->
+      <property name="eclipselink.canonicalmodel.subpackage" value="test"/>
+      <!--
+      <property name="javax.persistence.sql-load-script-source" value="scripts/create.sql"/>
+      
+      -->
+    </properties>
+  </persistence-unit>
+</persistence>
