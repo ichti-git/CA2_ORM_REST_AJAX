@@ -5,7 +5,9 @@
  */
 package rest;
 
+import entities.InfoGeneral;
 import entities.Person;
+import exception.GeneralNotFoundException;
 import exception.PersonNotFoundException;
 import facade.Facade;
 import facade.JSONConverter;
@@ -32,7 +34,7 @@ public class PersonRest {
     @Context
     private UriInfo context;
     Facade facade = new Facade(Persistence.createEntityManagerFactory("CA2PU_TEST"));
-    String completeinfo = "firstname,lastname,email,hobbies,phones,street,streetnumber,zipcode,city";
+    String completeinfo = "id,firstname,lastname,email,hobbies,phones,street,streetnumber,zipcode,city";
 
     /**
      * Creates a new instance of RESTAPI
@@ -99,8 +101,10 @@ public class PersonRest {
     }
     
     @DELETE
+    @Produces("application/json")
     @Path("/{id}")
-    public void deletePerson(@PathParam("id") int id) {
-        facade.deleteGeneral(id);
+    public String deletePerson(@PathParam("id") int id) throws GeneralNotFoundException {
+        InfoGeneral ig = facade.deleteGeneral(id);
+        return JSONConverter.getJSONfromPerson(ig.getPerson(), completeinfo);
     }
 }

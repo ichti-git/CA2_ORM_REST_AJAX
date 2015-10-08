@@ -8,6 +8,7 @@ package facade;
 import entities.Company;
 import entities.Person;
 import entities.InfoGeneral;
+import exception.GeneralNotFoundException;
 import exception.PersonNotFoundException;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public interface FacadeInterface {
     public List<Company> getCompanies();
     public Person addPerson(Person p);
     public Company addCompany(Company c);
-    public InfoGeneral deleteGeneral(int id);
+    public InfoGeneral deleteGeneral(int id) throws GeneralNotFoundException;
     public Person editPerson(Person p) throws PersonNotFoundException;
     public Company editCompany(Company c); //throws CompanyNotFoundException
     

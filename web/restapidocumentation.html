@@ -15,6 +15,7 @@ and open the template in the editor.
     <body>
         The following fields is available in the api (case sensitive):<br>
         Person:<br>
+        id - the persons unique identification<br>
         firstname - First name of a person<br> 
         lastname - Last name of a person<br>
         hoobies [name, description] - an array of a persons hobbies, given by a name and description<br>
@@ -142,7 +143,7 @@ and open the template in the editor.
         <b>api/person/</b><br>
         Creates a a new person, with the information given in a json string. The format is the same 
         as returned by the GET api. Wrong/unknown fields will be ignored. <br>
-        If succesful, a json string with the created person will be returned.<br>
+        If successful, a json string with the created person will be returned.<br>
         If the json is malformed, a "500 Malformed json given" will be returned.<br>
         <div class='toggleexample'>Click to show example<br><div class='jsonexample'>
                 example of a correct json request:<br>
@@ -155,35 +156,46 @@ and open the template in the editor.
             </div></div>
         <br><br>
         POST:<br>
-        <b>api/person/custom/{id}/{infolist}</b><br>
-        Returns the information given by the {infolist} of the person with {id} as json. 
-        The {infolist} is a comma seperated (no spaces) list of fields (as shown at the top of the page).
-        Information not existing for a person will be omitted.<br>
-        If the person with {id} does not exist, a 404 Person not found will be returned.<br>
+        <b>api/person/{id}</b><br>
+        Edits the person with the given {id}. The field to edit is given by a json string, 
+        in the same returned by the GET api. Only fields included will be edited.
+        Wrong/unknown fields will be ignored. <br>
+        If successful, all of the persons existing informations will be returned as json. <br>
+        If the person with {id} does not exist, a "404 Person not found" will be returned.<br>
+        If the json is malformed, a "500 Malformed json given" will be returned.<br>
         <div class='toggleexample'>Click to show example<br><div class='jsonexample'>
-                given 'api/person/custom/2/lastname,street,city,phones' the 
-                following will be returned:<br>
+                given the following json on 'api/person/2'<br>
 {
-  "lastname": "Smith",
+  "lastname": "Madsen",
   "street": "Hansensvej",
-  "city": "Frederikssund"
-  }<br>
-            </div></div>
+  "streetnumber": "44"
+} <br>
+The returned json will then be: <br>
+{
+"id": 2,
+"firstname": "Alice",
+"lastname": "Madsen",
+"street": "Hansensvej",
+"streetnumber": "44",
+}
+    </div></div>
         <br><br>
         DELETE:<br>
-        <b>api/person/custom/{id}/{infolist}</b><br>
-        Returns the information given by the {infolist} of the person with {id} as json. 
-        The {infolist} is a comma seperated (no spaces) list of fields (as shown at the top of the page).
-        Information not existing for a person will be omitted.<br>
-        If the person with {id} does not exist, a 404 Person not found will be returned.<br>
+        <b>api/person/{id}</b><br>
+        Deletes the person with {id} and returns all the information as json. <br>
+        If the person with {id} does not exist, a "404 Person not found" will be returned.<br>
         <div class='toggleexample'>Click to show example<br><div class='jsonexample'>
-                given 'api/person/custom/2/lastname,street,city,phones' the 
-                following will be returned:<br>
+                given 'api/person/3' the person with id 3 will be deleted and the following returned:<br>
 {
-  "lastname": "Smith",
-  "street": "Hansensvej",
-  "city": "Frederikssund"
-  }<br>
+id: 3,
+"firstname": "Bob",
+"lastname": "Gordard",
+"email": "bob@last.em",
+"street": "TinyRoad",
+"streetnumber": "2",
+"zipcode": "4000",
+"city": "Roskilde"
+}<br>
             </div></div>
         <br><br>
         

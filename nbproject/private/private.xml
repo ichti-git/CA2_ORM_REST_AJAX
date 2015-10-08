@@ -15,12 +15,14 @@
             <file>file:/home/ichti/NetBeansProjects/CA2/src/java/entities/City.java</file>
             <file>file:/home/ichti/NetBeansProjects/CA2/src/java/entities/InfoGeneral.java</file>
             <file>file:/home/ichti/NetBeansProjects/CA2/src/java/facade/JSONConverter.java</file>
+            <file>file:/home/ichti/NetBeansProjects/CA2/web/person.js</file>
             <file>file:/home/ichti/NetBeansProjects/CA2/src/java/entities/Person.java</file>
             <file>file:/home/ichti/NetBeansProjects/CA2/src/java/exception/GeneralExceptionMapper.java</file>
             <file>file:/home/ichti/NetBeansProjects/CA2/src/java/exception/PersonNotFoundExceptionMapper.java</file>
-            <file>file:/home/ichti/NetBeansProjects/CA2/src/java/entities/Phone.java</file>
-            <file>file:/home/ichti/NetBeansProjects/CA2/src/java/exception/PersonNotFoundException.java</file>
+            <file>file:/home/ichti/NetBeansProjects/CA2/src/java/entities/Hobby.java</file>
+            <file>file:/home/ichti/NetBeansProjects/CA2/web/person.html</file>
             <file>file:/home/ichti/NetBeansProjects/CA2/src/java/facade/FacadeInterface.java</file>
+            <file>file:/home/ichti/NetBeansProjects/CA2/src/java/exception/PersonNotFoundException.java</file>
             <file>file:/home/ichti/NetBeansProjects/CA2/src/java/scripts/populateZip_TEST.sql</file>
             <file>file:/home/ichti/NetBeansProjects/CA2/test/test/FacadeTest.java</file>
             <file>file:/home/ichti/NetBeansProjects/CA2/src/java/facade/Facade.java</file>

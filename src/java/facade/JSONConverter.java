@@ -56,6 +56,7 @@ public class JSONConverter {
                 }
                 if (hobbyarray.size() > 0) json.add("hobbies", hobbyarray);
             }
+            if (infoitem.equals("id")) json.addProperty("id", p.getInfoId());
             if (infoitem.equals("email")) json.addProperty("email", p.getInfoGeneral().getEmail());
             if (infoitem.equals("phones") && p.getInfoGeneral().getPhoneCollection() != null) {
                 JsonArray phonearray = new JsonArray();
@@ -82,67 +83,80 @@ public class JSONConverter {
     
     public static Person getPersonfromJSON(String json) {
         JsonObject jsonobj = new JsonParser().parse(json).getAsJsonObject();
-        Person p = new Person();
-        InfoGeneral ig = new InfoGeneral();
-        Address a = new Address();
-        Collection<Hobby> hs = new ArrayList<>();
-        City c = new City();
-        a.setZipCode(c);
-        ig.setAddressId(a);
-        p.setInfoGeneral(ig);
-        p.setHobbyCollection(hs);
-        //From Person class
-        if (jsonobj.get("firstname") != null) p.setFirstName(jsonobj.get("firstname").toString());
-        if (jsonobj.get("lastname") != null) p.setLastName(jsonobj.get("lastname").toString());
-        if (jsonobj.get("hobbies") != null) {
-            JsonArray hobbiesArr = jsonobj.getAsJsonArray("hobbies");
-            for(JsonElement hitem : hobbiesArr){
-                Hobby hobby = new Hobby();
-                hobby.setName(hitem.getAsJsonObject().get("name").getAsString());
-                hobby.setDescription(hitem.getAsJsonObject().get("description").getAsString());
-                p.getHobbyCollection().add(hobby);
-            }
-        }
-        
-        //From InfoGeneral class
-        if (jsonobj.get("email") != null) p.getInfoGeneral().setEmail(jsonobj.get("email").toString());
-        if (jsonobj.get("phones") != null) {
-            JsonArray phonesArr = jsonobj.getAsJsonArray("phones");
-            for(JsonElement pitem : phonesArr){
-                Phone phone = new Phone();
-                phone.setPhoneNumber(pitem.getAsJsonObject().get("number").getAsString());
-                phone.setDescription(pitem.getAsJsonObject().get("description").getAsString());
-                p.getInfoGeneral().getPhoneCollection().add(phone);
-            }
-        }
         //Address
-        if (jsonobj.get("street") == null && jsonobj.get("streetnumber") == null) {
-            p.getInfoGeneral().setAddressId(null);
+        Address a = new Address();
+        City c = new City();
+        if (jsonobj.get("street") == null && jsonobj.get("streetnumber") == null && jsonobj.get("zipcode") == null) {
+            a = null;
         }
         else {
-            if (jsonobj.get("street") != null) p.getInfoGeneral().getAddressId().setStreet(jsonobj.get("street").toString());
-            if (jsonobj.get("streetnumber") != null) p.getInfoGeneral().getAddressId().setStreetNumber(jsonobj.get("streetnumber").toString());
+            if (jsonobj.get("street") != null) a.setStreet(jsonobj.get("street").getAsString());
+            if (jsonobj.get("streetnumber") != null) a.setStreetNumber(jsonobj.get("streetnumber").getAsString());
             //City
             if (jsonobj.get("zipcode") != null) {
-                p.getInfoGeneral().getAddressId().getZipCode().setZipCode(jsonobj.get("zipcode").toString());
+                c.setZipCode(jsonobj.get("zipcode").getAsString());
                 
                 if (jsonobj.get("city") != null) {
-                    p.getInfoGeneral().getAddressId().getZipCode().setCity(jsonobj.get("city").toString());
+                    c.setCity(jsonobj.get("city").getAsString());
                 }
             }   
             else {
-                p.getInfoGeneral().getAddressId().setZipCode(null);
+                c = null;
             }
-            
+            a.setZipCode(c);
+        }
+        //From InfoGeneral class
+        InfoGeneral ig = new InfoGeneral();
+        Collection<Phone> ps = null; 
+        if (jsonobj.get("email") == null && jsonobj.get("email") == null) {
+            ig = null;
+        }
+        else {
+            if (jsonobj.get("email") != null) ig.setEmail(jsonobj.get("email").getAsString());
+            if (jsonobj.get("phones") != null) {
+                JsonArray phonesArr = jsonobj.getAsJsonArray("phones");
+                for(JsonElement pitem : phonesArr){
+                    if (pitem.getAsJsonObject().get("number") != null) {
+                        ps = new ArrayList<>();
+                        Phone phone = new Phone();
+                        phone.setPhoneNumber(pitem.getAsJsonObject().get("number").getAsString());
+                        if (pitem.getAsJsonObject().get("description") != null)
+                            phone.setDescription(pitem.getAsJsonObject().get("description").getAsString());
+                        ps.add(phone);
+                    }
+                }
+            }
+            ig.setPhoneCollection(ps);
+            ig.setAddressId(a);
         }
         
+        Person p = new Person();
+        Collection<Hobby> hs = null; 
+        //From Person class
+        if (jsonobj.get("firstname") != null) p.setFirstName(jsonobj.get("firstname").getAsString());
+        if (jsonobj.get("lastname") != null) p.setLastName(jsonobj.get("lastname").getAsString());
+        if (jsonobj.get("hobbies") != null) {
+            hs = new ArrayList<>();
+            JsonArray hobbiesArr = jsonobj.getAsJsonArray("hobbies");
+            for(JsonElement hitem : hobbiesArr){
+                if (hitem.getAsJsonObject().get("name") != null) {
+                    Hobby hobby = new Hobby();
+                    hobby.setName(hitem.getAsJsonObject().get("name").getAsString());
+                    if (hitem.getAsJsonObject().get("description") != null)
+                        hobby.setDescription(hitem.getAsJsonObject().get("description").getAsString());
+                    hs.add(hobby);
+                }
+            }
+        }
+        p.setInfoGeneral(ig);
+        p.setHobbyCollection(hs);
         return p;
     }
     
     public static Address getAddressfromJSONObject(JsonObject jsonaddr) {
         Address a = new Address();
-        if (jsonaddr.get("street") != null) a.setStreet(jsonaddr.get("street").toString());
-        if (jsonaddr.get("streetnumber") != null) a.setStreetNumber(jsonaddr.get("streetnumber").toString());
+        if (jsonaddr.get("street") != null) a.setStreet(jsonaddr.get("street").getAsString());
+        if (jsonaddr.get("streetnumber") != null) a.setStreetNumber(jsonaddr.get("streetnumber").getAsString());
         //if (jsonaddr.get("zip") != null) a.setZipCode(getCityfromJSONObject(jsonaddr.get("zipcode")));
         
         a.setStreet(null);
@@ -152,8 +166,8 @@ public class JSONConverter {
     
     public static City getCityfromJSONObject(JsonObject jsoncity) {
         City c = new City();
-        if (jsoncity.get("zipcode") != null) c.setZipCode(jsoncity.get("zipcode").toString());
-        if (jsoncity.get("cityname") != null) c.setCity(jsoncity.get("cityname").toString());
+        if (jsoncity.get("zipcode") != null) c.setZipCode(jsoncity.get("zipcode").getAsString());
+        if (jsoncity.get("cityname") != null) c.setCity(jsoncity.get("cityname").getAsString());
         
         return c;
     }

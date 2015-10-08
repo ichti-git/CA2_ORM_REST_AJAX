@@ -11,6 +11,8 @@ import entities.Company;
 import entities.Hobby;
 import entities.InfoGeneral;
 import entities.Person;
+import entities.Phone;
+import exception.GeneralNotFoundException;
 import exception.PersonNotFoundException;
 import java.util.Collection;
 import java.util.Iterator;
@@ -74,12 +76,17 @@ public class Facade implements FacadeInterface {
         if (p.getInfoGeneral() != null) ig = p.getInfoGeneral();
         try {
             em.getTransaction().begin();
-            p.setInfoId(addInfoGeneral(ig));
+            int igid = addInfoGeneral(ig);
+            p.setInfoId(igid);
+            ig = em.find(InfoGeneral.class, igid);
             p.setInfoGeneral(ig);
+            ig.setPerson(p);
             em.persist(p);
-            Iterator ite = hs.iterator();
-            while (ite.hasNext()) {
-                em.persist(ite.next());
+            if (hs != null) {
+                Iterator ite = hs.iterator();
+                while (ite.hasNext()) {
+                    em.persist(ite.next());
+                }
             }
             em.getTransaction().commit();
             return p;
@@ -109,14 +116,24 @@ public class Facade implements FacadeInterface {
     
     //Delete for both Person and Company. 
     @Override
-    public InfoGeneral deleteGeneral(int id) {
+    public InfoGeneral deleteGeneral(int id) throws GeneralNotFoundException {
         EntityManager em = getEntityManager();
         try {
             InfoGeneral ig = em.find(InfoGeneral.class, id);
-            if(ig == null){
-              //throw new PersonNotFoundException("No Person found with provided id");
+            if(ig == null) {
+              throw new GeneralNotFoundException("No Person found with provided id");
             }
             em.getTransaction().begin();
+            /*
+            if (ig.getPerson() != null) {
+                em.remove(ig.getPerson());
+                ig.getPerson().setInfoId(null);
+            }
+            if (ig.getCompany() != null) {
+                em.remove(ig.getCompany());
+                ig.setCompany(null);
+            }*/
+            em.remove(ig.getPerson());
             em.remove(ig);
             em.getTransaction().commit();
             return ig;
@@ -125,6 +142,7 @@ public class Facade implements FacadeInterface {
             em.close();
         }
     }
+    @Override
     public Person editPerson(Person p) throws PersonNotFoundException{
         EntityManager em = getEntityManager();
         try {
@@ -234,6 +252,7 @@ public class Facade implements FacadeInterface {
     private int addInfoGeneral(InfoGeneral ig) {
         EntityManager em = getEntityManager();
         Address a = new Address();
+        //Collection<Phone> ps = ig.getPhoneCollection();
         if (ig.getAddressId() != null) a = ig.getAddressId();
         ig.setAddressId(addAddress(a));
         try {
@@ -251,11 +270,14 @@ public class Facade implements FacadeInterface {
     private Address addAddress(Address a) {
         EntityManager em = getEntityManager();
         Query q = null;
+        if ((a.getStreet() == null && a.getStreetNumber() == null) && a.getZipCode() == null) {
+            return null;
+        } 
         if (a.getStreet() != null && a.getStreetNumber() != null && a.getZipCode() != null) {
             String qstring = "SELECT a FROM Address a WHERE "
                     + "a.street='"+a.getStreet()+"' AND "
-                    + "a.streetNumber='"+a.getStreetNumber()+"' AND"
-                    + "a.zipCode='"+a.getZipCode().getZipCode()+"'";
+                    + "a.streetNumber='"+a.getStreetNumber()+"' AND "
+                    + "a.zipCode.zipCode='"+a.getZipCode().getZipCode()+"'";
             q = em.createQuery(qstring);
         }
         if ((q != null && q.getResultList().isEmpty()) || q == null) {

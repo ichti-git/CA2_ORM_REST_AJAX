@@ -9,6 +9,8 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -26,11 +28,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Phone.findAll", query = "SELECT p FROM Phone p"),
+    @NamedQuery(name = "Phone.findByPhoneId", query = "SELECT p FROM Phone p WHERE p.phoneId = :phoneId"),
     @NamedQuery(name = "Phone.findByPhoneNumber", query = "SELECT p FROM Phone p WHERE p.phoneNumber = :phoneNumber"),
     @NamedQuery(name = "Phone.findByDescription", query = "SELECT p FROM Phone p WHERE p.description = :description")})
 public class Phone implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "phoneId")
+    private Integer phoneId;
     @Basic(optional = false)
     @Column(name = "phoneNumber")
     private String phoneNumber;
@@ -46,7 +53,14 @@ public class Phone implements Serializable {
     public Phone(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+    
+    public int getPhoneId() {
+        return phoneId;
+    }
 
+    public void setPhoneId(int id) {
+        this.phoneId = id;
+    }
     public String getPhoneNumber() {
         return phoneNumber;
     }

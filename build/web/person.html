@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <script src="jquery-1.11.3.min.js"></script>
+        <script src='person.js'></script>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div id="page">
+            <div id="form">
+                <table id="formtable">
+                    <tr><td>Id</td><td><input type="number" id="form_id"></td></tr>
+                    <tr><td>First name</td><td><input type="text" id="form_firstname"></td></tr>
+                    <tr><td>Last name</td><td><input type="text" id="form_lastname"></td></tr>
+                    <tr><td>Email</td><td><input type="text" id="form_email"></td></tr>
+                    <tr><td>Hobbies</td>
+                        <td><table>
+                                <tr data-changed="false"><td>Hobby:<input type="text" class="form_hobbies"></td><td>Description: <input type="text" class="form_hobbies_desc"></td></tr>
+                        </table></td>
+                    </tr>
+                    <tr><td>Phone numbers</td>
+                        <td><table>
+                                <tr data-changed=false><td>Number:<input type="text" class="form_phones"></td><td>Description: <input type="text" class="form_phones_desc"></td></tr>
+                        </table></td>
+                    </tr>
+                    <tr><td>Street name</td><td><input type="text" id="form_street"></td></tr>
+                    <tr><td>Street number</td><td><input type="text" id="form_streetnumber"></td></tr>
+                    <tr><td>Zip code</td><td><input type="text" id="form_zip"></td></tr>
+                    <tr><td>City name</td><td><input type="text" id="form_city"></td></tr>
+                </table>
+                <button id="get">Get person</button>
+                <button id="add">Add person</button>
+                <button id="edit">Edit person</button>
+                <button id="delete">Delete person</button>
+                
+            </div>
+            <div id="info"></div>
+        </div>
+    </body>
+</html>

@@ -45,7 +45,7 @@ public class Person implements Serializable {
     @ManyToMany(mappedBy = "personCollection")
     private Collection<Hobby> hobbyCollection;
     @JoinColumn(name = "infoId", referencedColumnName = "infoId", insertable = false, updatable = false)
-    @OneToOne(optional = false)
+    @OneToOne(optional = false, orphanRemoval = true)
     private InfoGeneral infoGeneral;
 
     public Person() {
