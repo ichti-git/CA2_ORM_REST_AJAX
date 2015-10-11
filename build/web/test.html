@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Test documentation</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <h3>Backend test</h3>
+        Testing of the Facade class using JUnit. I wanted to test each method, so given some
+        correct argument, they would do and return the expected result.<br>
+        I did not want to test explicit for errors, since the Facade class is 
+        never given argument by an user, only be the system, so it should never 
+        receive wrong arguments.<br>
+        Initially all tests was correct, but during the test of the REST API, 
+        I found a problem with the EditPerson method. It only returned the 
+        edited Person class, but the edited InfoGeneral class is not returned.
+        It is updated though, as seen by using a get on the new person will give
+        a correct InfoGeneral class. I have not been able to locate the problem
+        for this error.
+        
+        <h3>REST API test</h3>
+        Testing of the REST API using RestAssured. I have tested the matching 
+        get/add/edit/delete methods allowed. I also tested for some errors
+        I deemed very plausible that an user would run into (person not found, 
+        malformed json, wrong id input). <br>
+        They are all correct, except for the 
+        return of edit, but that is a problem in the Facade class as explained 
+        above.
+        <br><br>
+        
+        <b>Test classes</b><br>
+        For both test classes do: <br>
+        Clean and build project. Run project. Run the test class 
+        (FacadeTest.java, RestTest.java)<br>
+        They will both give error in the EditTest, the rest of the test should
+        be correct.<br>
+        
+        <h3>Manual testing</h3>
+        Credentials for testing: password: "admin", username: "admin"<br>
+        <u>GET</u><br>
+        no credentials needed here<br>
+        Goto <a href='/CA2/api/person/complete'>/CA2/api/person/complete</a>
+        , a list of persons as json should appear.<br>
+        Goto <a href='/CA2/api/person/custom/id,firstname,city'>/CA2/api/person/custom/id,firstname,city</a>
+        , a list of persons as json should appear. The list should only contain ids, first names and cities. 
+        Optionally try changing the last part of the url (the infolist) to other fields (as descriped in the api
+        documentation <br>
+        Goto <a href='/CA2/api/person/complete/1'>CA2/api/person/complete/1</a>
+        , the person with id 1 and all his information as json should be appear.<br>
+        You can also do custom with 1 person by id 
+        <a href='/CA2/api/person/custom/1/id,firstname,city'>/CA2/api/person/custom/1/id,firstname,city</a>
+        <br>
+        <br>
+        <u>PUT</u><br>
+        Credentials needed. Using Postman/Advanced Rest Client.<br>
+        URL should be "{base}/CA2/api/person/".<br>
+        Enter credentials in header. <br>
+        Enter json in the body (example: {"lastname":"Mossen", "street":"HCAVej","streetnumber":"2"}). 
+        The new person with id and the given info should be returned as json.<br>
+        Try with unknown field in the json body (example: {"unknown":"field", "lastname":"Mossen", "street":"HCAVej","streetnumber":"2"}). 
+        It should return the same as before, with a new id.<br>
+        Try with an error in the json body (example: {"lastname":"Mossen", "street":"HCAVej","streetnumber"2"}). 
+        It should return an error as json.<br>
+        <br>
+        <u>POST</u><br>
+        Credentials needed. Using Postman/Advanced Rest Client.<br>
+        URL should be "{base}/CA2/api/person/1". or any other id you want instead of 1<br>
+        Enter credentials in header. <br>
+        You can do the same tests as with PUT, except it should return all the information
+        of the edited person, instead of just what given in the json body.<br>
+        Try with URL "{base}/CA2/api/person/999". An error (Person not found)
+        as json should be returned.<br>
+        <br>
+        <u>DELETE</u><br>
+        Credentials needed. Using Postman/Advanced Rest Client.<br>
+        URL should be "{base}/CA2/api/person/1". or any other id you want instead of 1<br>
+        Enter credentials in header. <br>
+        The person with id 1 and all information should appear as json. <br>
+        Try with URL "{base}/CA2/api/person/999". An error (Person not found)
+        as json should be returned.<br>
+        
+    </body>
+</html>

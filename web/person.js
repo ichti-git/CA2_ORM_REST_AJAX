@@ -1,5 +1,7 @@
 $(document).ready(readyFunc);
 var t; //test variable
+//
+//Add events when the page is ready
 function readyFunc() {
     $('.form_hobbies, .form_hobbies_desc').on('change', function(event) {
         addHobbyField(event);
@@ -63,6 +65,7 @@ function readyFunc() {
     });
 }
 
+//form event
 function addHobbyField(event) {
     h = $(event.target).parent().parent();
     if (h.data("changed") == false) {
@@ -77,6 +80,8 @@ function addHobbyField(event) {
         h.data("changed", "true");
     }
 }
+
+//form event
 function addPhoneField(event) {
     h = $(event.target).parent().parent();
     if (h.data("changed") == false) {
@@ -92,6 +97,7 @@ function addPhoneField(event) {
     }
 }
 
+//From json object to more readable info, to be used in the info div
 function parsePerson(data) {
     var htmlstring = "";
     for (var info in data) {
@@ -112,6 +118,8 @@ function parsePerson(data) {
     return htmlstring;
 }
 
+//Converts the info in the person form to a json string
+//Could also have used an object and JSON.stringify in this function
 function makeJsonPerson() {
     var jsonstring = "{";
     if ($("#form_id").val() != "") jsonstring += '"id":"' + $("#form_id").val() + '",';
@@ -151,6 +159,7 @@ function makeJsonPerson() {
     return jsonstring;
 }
 
+//Write and error message in the info div.
 function errorToInfo(data) {
     var failstring = "Error code: " + data.status + "<br>";
     failstring += "Error message: " + data.responseJSON.message + "<br>";

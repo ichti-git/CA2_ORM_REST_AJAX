@@ -55,14 +55,12 @@ public class FacadeTest {
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     
-    //Test in correct order, where order matters
+    //Test in correct order, where the order matters (testing getting a 
+    //list before deleting something).
     @Test 
     public void testOrder() throws PersonNotFoundException, GeneralNotFoundException {
         testGetPersons();
-        //testGetPerson();
-        //testAddPerson();
         testDeleteGeneral();
-        //testEditPerson();
     }
     //@Test
     public void testGetPersons() {
@@ -151,10 +149,14 @@ public class FacadeTest {
         a.setStreet("Moonroad");
         ig.setAddressId(a);
         p.setInfoGeneral(ig);
-        facade.editPerson(p);
+        Person np = facade.editPerson(p);
         assertThat(facade.getPerson(2).getInfoGeneral().getEmail(), is("hangoo@my.ll"));
         assertThat(facade.getPerson(2).getLastName(), is("Goose"));
         assertThat(facade.getPerson(2).getInfoGeneral().getAddressId().getStreet(), is("Moonroad"));
+        //error below
+        assertThat(np.getInfoGeneral().getEmail(), is("hangoo@my.ll"));
+        assertThat(np.getLastName(), is("Goose"));
+        assertThat(np.getInfoGeneral().getAddressId().getStreet(), is("Moonroad"));
         
     }
 }
