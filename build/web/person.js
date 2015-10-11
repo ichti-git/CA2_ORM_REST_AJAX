@@ -1,5 +1,5 @@
 $(document).ready(readyFunc);
-var t;
+var t; //test variable
 function readyFunc() {
     $('.form_hobbies, .form_hobbies_desc').on('change', function(event) {
         addHobbyField(event);
@@ -16,10 +16,7 @@ function readyFunc() {
                 type: 'GET',
                 contentType: 'application/json; charset=UTF-8'
             }).fail(function(data) {
-                //alert("Quote not found");
-                //var error = data.responseJSON;
-                //makeError(error.code +": "+error.message);
-                //$('#editTextQuote').val("");
+                errorToInfo(data);
             }).done(function(data) {
                 $("#info").html(parsePerson(data));
             });            
@@ -33,12 +30,7 @@ function readyFunc() {
             data: person,
             contentType: 'application/json; charset=UTF-8'
         }).fail(function(data) {
-            //alert("Quote not found");
-            /*
-            var error = data.responseJSON;
-            makeError(error.code +": "+error.message);
-            $('#editTextQuote').val("");
-            */
+            errorToInfo(data);
         }).done(function(data) {
             $("#info").html(parsePerson(data));
         });
@@ -52,12 +44,7 @@ function readyFunc() {
             data: person,
             contentType: 'application/json; charset=UTF-8'
         }).fail(function(data) {
-            //alert("Quote not found");
-            /*
-            var error = data.responseJSON;
-            makeError(error.code +": "+error.message);
-            $('#editTextQuote').val("");
-            */
+            errorToInfo(data);
         }).done(function(data) {
             $("#info").html(parsePerson(data));
         });
@@ -69,12 +56,7 @@ function readyFunc() {
             type: 'DELETE',
             contentType: 'application/json; charset=UTF-8'
         }).fail(function(data) {
-            //alert("Quote not found");
-            /*
-            var error = data.responseJSON;
-            makeError(error.code +": "+error.message);
-            $('#editTextQuote').val("");
-            */
+            errorToInfo(data);
         }).done(function(data) {
             $("#info").html(parsePerson(data));
         });
@@ -167,4 +149,11 @@ function makeJsonPerson() {
     jsonstring = jsonstring.slice(0,-1);
     jsonstring += "}";
     return jsonstring;
+}
+
+function errorToInfo(data) {
+    var failstring = "Error code: " + data.status + "<br>";
+    failstring += "Error message: " + data.responseJSON.message + "<br>";
+    $("#info").html(failstring);
+    
 }

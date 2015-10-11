@@ -5,6 +5,7 @@
  */
 package rest;
 
+import deploy.DeploymentConfiguration;
 import entities.InfoGeneral;
 import entities.Person;
 import exception.GeneralNotFoundException;
@@ -32,8 +33,8 @@ import javax.ws.rs.Produces;
 public class PersonRest {
 
     @Context
-    private UriInfo context;
-    Facade facade = new Facade(Persistence.createEntityManagerFactory("CA2PU_TEST"));
+    private UriInfo context;  
+    Facade facade = new Facade(Persistence.createEntityManagerFactory(DeploymentConfiguration.PU_NAME));
     String completeinfo = "id,firstname,lastname,email,hobbies,phones,street,streetnumber,zipcode,city";
 
     /**
@@ -96,8 +97,9 @@ public class PersonRest {
     public String editPerson(@PathParam("id") int id, String content) throws PersonNotFoundException {
         Person p = JSONConverter.getPersonfromJSON(content);
         p.setInfoId(id);
-        p = facade.editPerson(p);
-        return JSONConverter.getJSONfromPerson(p, completeinfo);
+        //p = facade.editPerson(p);
+        
+        return JSONConverter.getJSONfromPerson(facade.editPerson(p), completeinfo);
     }
     
     @DELETE

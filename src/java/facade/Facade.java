@@ -134,7 +134,9 @@ public class Facade implements FacadeInterface {
                 ig.setCompany(null);
             }*/
             em.remove(ig.getPerson());
+            //em.remove(ig.getPhoneCollection());
             em.remove(ig);
+            em.flush();
             em.getTransaction().commit();
             return ig;
         }
@@ -154,7 +156,14 @@ public class Facade implements FacadeInterface {
             if (p.getFirstName() != null) ep.setFirstName(p.getFirstName());
             if (p.getLastName() != null) ep.setLastName(p.getLastName());
             if (p.getHobbyCollection() != null) ep.setHobbyCollection(p.getHobbyCollection());
-            if (p.getInfoGeneral() != null) ep.setInfoGeneral(editInfoGeneral(p.getInfoGeneral()));
+            if (p.getInfoGeneral() != null) {
+                
+                p.getInfoGeneral().setInfoId(ep.getInfoId());
+                InfoGeneral ig = p.getInfoGeneral();
+                ig.setInfoId(ep.getInfoId());
+                ig = editInfoGeneral(ig);
+                ep.setInfoGeneral(ig);
+            }
             em.getTransaction().begin();
             em.merge(ep);
             em.getTransaction().commit();
@@ -175,10 +184,12 @@ public class Facade implements FacadeInterface {
             }
             else {
                 InfoGeneral ige = em.find(InfoGeneral.class, ig.getInfoId());
-            //if (ige != null) {
                 if (ig.getEmail() != null) ige.setEmail(ig.getEmail());
                 if (ig.getPhoneCollection() != null) ige.setPhoneCollection(ig.getPhoneCollection());
-                if (ig.getAddressId() != null) ige.setAddressId(editAddress(ig.getAddressId()));
+                if (ig.getAddressId() != null) {
+                    ig.getAddressId().setAddressId(ige.getAddressId().getAddressId());
+                    ige.setAddressId(editAddress(ig.getAddressId()));
+                }
                 em.getTransaction().begin();
                 em.merge(ige);
                 em.getTransaction().commit();
@@ -192,13 +203,21 @@ public class Facade implements FacadeInterface {
     
     private Address editAddress(Address a) {
         EntityManager em = getEntityManager();
-        Address ae = em.find(Address.class, a.getAddressId());
+        Address ae = null;
+        if (a.getAddressId() == null) {
+            ae = addAddress(a);
+            ae.setZipCode(a.getZipCode());
+            return ae;
+        }
+        ae = em.find(Address.class, a.getAddressId());
         if (ae != null) {
             try {
 
                 if (a.getStreet() != null) ae.setStreet(a.getStreet());
                 if (a.getStreetNumber() != null) ae.setStreetNumber(a.getStreetNumber());
-                if (a.getZipCode() != null) ae.setZipCode(editCity(a.getZipCode()));
+                if (a.getZipCode() != null) { 
+                    ae.setZipCode(editCity(a.getZipCode()));
+                }
                 em.getTransaction().begin();
                 em.merge(ae);
                 em.getTransaction().commit();
@@ -217,16 +236,20 @@ public class Facade implements FacadeInterface {
         EntityManager em = getEntityManager();
         City ce = em.find(City.class, c.getZipCode());
         if (ce != null) {
+            return ce;
+            /*
             try {
                 if (c.getCity() != null) ce.setCity(c.getCity());
                 em.getTransaction().begin();
                 em.merge(ce);
+                //em.flush();
                 em.getTransaction().commit();
                 return ce;
             }
             finally {
                 em.close();
             }
+            */
         }
         else {
             return addCity(c);
@@ -272,31 +295,18 @@ public class Facade implements FacadeInterface {
         Query q = null;
         if ((a.getStreet() == null && a.getStreetNumber() == null) && a.getZipCode() == null) {
             return null;
-        } 
-        if (a.getStreet() != null && a.getStreetNumber() != null && a.getZipCode() != null) {
-            String qstring = "SELECT a FROM Address a WHERE "
-                    + "a.street='"+a.getStreet()+"' AND "
-                    + "a.streetNumber='"+a.getStreetNumber()+"' AND "
-                    + "a.zipCode.zipCode='"+a.getZipCode().getZipCode()+"'";
-            q = em.createQuery(qstring);
         }
-        if ((q != null && q.getResultList().isEmpty()) || q == null) {
-            City c = new City();
-            if (a.getZipCode() != null) c = a.getZipCode();
-            a.setZipCode(addCity(c));
-            try {
-                em.getTransaction().begin();
-                em.persist(a);
-                em.flush();
-                em.getTransaction().commit();
-                return a;
-            }
-            finally {
-                em.close();
-            }
+        City c = new City();
+        if (a.getZipCode() != null) c = a.getZipCode();
+        a.setZipCode(addCity(c));
+        try {
+            em.getTransaction().begin();
+            em.persist(a);
+            em.getTransaction().commit();
+            return a;
         }
-        else {
-            return (Address)q.getSingleResult();
+        finally {
+            em.close();
         }
     }    
     
@@ -310,6 +320,7 @@ public class Facade implements FacadeInterface {
             try {
                 em.getTransaction().begin();
                 em.persist(c);
+                //em.flush();
                 em.getTransaction().commit();
                 return c;
             }
@@ -329,7 +340,7 @@ public class Facade implements FacadeInterface {
             try {
                 em.getTransaction().begin();
                 em.persist(ite.next());
-                em.flush();
+                //em.flush();
                 em.getTransaction().commit();
             }
             finally {

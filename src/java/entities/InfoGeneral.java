@@ -51,7 +51,7 @@ public class InfoGeneral implements Serializable {
     private Address addressId;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "infoGeneral")
     private Company company;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "infoGeneral", orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "infoGeneral")
     private Person person;
 
     public InfoGeneral() {

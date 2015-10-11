@@ -8,6 +8,7 @@ package exception;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+import deploy.DeploymentConfiguration;
 import javax.servlet.ServletContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -30,7 +31,8 @@ public class GeneralExceptionMapper
     @Override
     public Response toResponse(Throwable exception) {
         //boolean debug = true;
-        boolean debug = context.getInitParameter("debug").toLowerCase().equals("true");
+        //boolean debug = context.getInitParameter("debug").toLowerCase().equals("true");
+        boolean debug = DeploymentConfiguration.DEBUG;
         ErrorMessage err = new ErrorMessage(exception, debug);
         err.setMessage("Internal error occured. Sorry for the inconvenience");
         

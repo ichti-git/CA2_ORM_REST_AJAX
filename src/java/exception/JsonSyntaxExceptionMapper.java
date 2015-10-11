@@ -7,6 +7,7 @@ package exception;
 
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.MalformedJsonException;
+import deploy.DeploymentConfiguration;
 import static exception.PersonNotFoundExceptionMapper.gson;
 import javax.servlet.ServletContext;
 import javax.ws.rs.core.Context;
@@ -29,7 +30,8 @@ public class JsonSyntaxExceptionMapper
     @Override
     public Response toResponse(JsonSyntaxException e) {
         //boolean debug = true;
-        boolean debug = context.getInitParameter("debug").toLowerCase().equals("true");
+        //boolean debug = context.getInitParameter("debug").toLowerCase().equals("true");
+        boolean debug = DeploymentConfiguration.DEBUG;
         ErrorMessage err = new ErrorMessage(e, debug);
         err.setMessage("Malformed json given");
         return Response.status(500)

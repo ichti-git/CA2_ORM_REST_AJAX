@@ -7,6 +7,7 @@ package exception;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import deploy.DeploymentConfiguration;
 import javax.servlet.ServletContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -28,8 +29,9 @@ public class PersonNotFoundExceptionMapper implements
     
     @Override
     public Response toResponse(PersonNotFoundException exception) {
-        boolean debug = context.getInitParameter("debug").toLowerCase().equals("true");
+        //boolean debug = context.getInitParameter("debug").toLowerCase().equals("true");
         //boolean debug = true;
+        boolean debug = DeploymentConfiguration.DEBUG;
         ErrorMessage err = new ErrorMessage(exception, debug);
         err.setMessage("Person not found");
         return Response.status(404)
