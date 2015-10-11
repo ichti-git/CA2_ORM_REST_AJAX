@@ -10,7 +10,7 @@ import javax.persistence.metamodel.CollectionAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2015-10-11T14:24:46")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2015-10-11T15:58:30")
 @StaticMetamodel(InfoGeneral.class)
 public class InfoGeneral_ { 
 
